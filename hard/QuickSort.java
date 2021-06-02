@@ -1,41 +1,50 @@
-public static class QuickSort {
+import java.util.*;
 
-        public static void quickSort(int[] a) {
-            quickSort(a,0,a.length-1);
-        }
-
-        public  static void quickSort(int[] a, int i, int j) {
-            if (i>=j) return;
-
-            int pivot = findPivot(i,j);
-
-            pivot = partition(a,i,j,pivot);
-
-            quickSort(a,i,pivot-1);
-            quickSort(a,pivot+1,j);
-        }
-
-        public static int findPivot(int i, int j) {
-            Random random = new Random();
-            return random.nextInt(j-i) + i;
-        }
-
-        public static int partition(int[] a, int i, int j, int pivot) {
-            int fe=i,fg=j;
-            int pivotValue = a[pivot];
-            
-            for (int k=i;k<=j;++k) {
-                while (k < fg && a[k] > pivotValue) swap(a,k,fg--);
-                while (k > fe && a[k] < pivotValue) swap(a,k,fe++);
-            }
-
-            return fe;
-        }
-
-        public static void swap(int[] a, int i, int j) {
-            int tmp = a[i];
-            a[i] = a[j];
-            a[j] = tmp;
-        }
-
-    }
+class Program {
+  public static int[] quickSort(int[] array) {
+		doQuickSort(array, 0, array.length);
+    return array;
+  }
+	
+	public static void doQuickSort(int[] array, int start, int end) {
+		if (end - start <= 1) {
+			return;
+		}
+		Random random = new Random();
+		int pivot = start + random.nextInt(end - start);
+		
+		int[] separator = partition(array, start, end, pivot);
+		
+		doQuickSort(array, start, separator[0]);
+		doQuickSort(array, separator[1], end);
+	}
+	
+	public static int[] partition(int[] array, int start, int end, int pivot) {
+		int pivotValue = array[pivot];
+		int fe = start;
+		int fg = end;
+		int next = start;
+		while (next < fg) {
+			if (array[next] < pivotValue) {
+				swap(array, fe, next);
+				fe++;
+				next++;
+			}
+			else if (array[next] > pivotValue) {
+				fg--;
+				swap(array, fg, next);
+			}
+			else {
+				next++;
+			}
+		}
+		
+		return new int[]{fe, fg};
+	}
+	
+	public static void swap(int[] array, int i, int j) {
+		int tmp = array[i];
+		array[i] = array[j];
+		array[j] = tmp;
+	}
+}
