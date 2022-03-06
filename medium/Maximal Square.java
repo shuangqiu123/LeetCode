@@ -1,24 +1,21 @@
+// leetcode 221
 class Solution {
     public int maximalSquare(char[][] matrix) {
-        int n = matrix[0].length,m=matrix.length;
-        int[][] dp = new int[m][n];
-        int size = 0;
-        for (int i=0;i<m;++i) {
-            for (int j=0;j<n;++j) {
-                // if matrix is 0, then it cant be a square
-                if (matrix[i][j] == '0') 
-                    dp[i][j] = 0;
-                else if (i==0 || j==0)
-                    dp[i][j] = 1;
-                else {
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int[][] dp = new int[m + 1][n + 1];
+        int maxWidth = 0;
 
-                    // all three surrounding has to be greater than 1 to update
-                    dp[i][j] = Math.min(dp[i-1][j-1],Math.min(dp[i-1][j],dp[i][j-1]))+1;
-                }
-                size = Math.max(size, dp[i][j]);
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+               if (matrix[i - 1][j - 1] == '1') {
+                   int width = Math.min(dp[i - 1][j], Math.min(dp[i][j - 1], dp[i - 1][j - 1])) + 1;
+                   dp[i][j] = width;
+                   maxWidth = Math.max(width, maxWidth);
+               }
             }
         }
         
-        return size * size;
+        return maxWidth * maxWidth;
     }
 }
